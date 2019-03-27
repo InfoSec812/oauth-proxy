@@ -15,7 +15,7 @@ pipeline {
     // Clone git repo
     stage('Clone'){
         steps {
-            dir('src/github.com/bvkin/openshift/oauth-proxy') {
+            dir('src/github.com/openshift/oauth-proxy') {
                 git branch: 'Issue-107_-_Add_option_to_pass_Authorization_Bearer_to_upstream', url: 'https://github.com/bvkin/oauth-proxy.git'
             }
         }
@@ -24,7 +24,7 @@ pipeline {
     // Run Go test  
     stage('Test'){
       steps {
-        dir('src/github.com/bvkin/openshift/oauth-proxy') {
+        dir('src/github.com/openshift/oauth-proxy') {
           sh '''
           pwd
           export GOPATH=$(echo $PWD | sed 's@/src/.*@/@g')
@@ -49,7 +49,7 @@ pipeline {
     // Run Go build, skipping tests
     stage('Build'){
       steps {
-        dir('src/github.com/bvkin/openshift/oauth-proxy') {
+        dir('src/github.com/openshift/oauth-proxy') {
           sh '''
           pwd
           export GOPATH=$(echo $PWD | sed 's@/src/.*@/@g')
@@ -62,7 +62,7 @@ pipeline {
     // SonarQube
     stage('Quality Analysis'){
         steps {
-            dir('src/github.com/bvkin/openshift/oauth-proxy') {
+            dir('src/github.com/openshift/oauth-proxy') {
               withSonarQubeEnv('sonar') {
                 sh "sonar-scanner -Dsonar.projectVersion=0.0.1.${BUILD_ID}"
               }
@@ -81,7 +81,7 @@ pipeline {
       stage("Build Container Image") {
           steps {
               
-              dir('src/github.com/bvkin/openshift/oauth-proxy') {
+              dir('src/github.com/openshift/oauth-proxy') {
                  script {
                     openshift.withCluster() {
                         
