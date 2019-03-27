@@ -28,8 +28,7 @@ pipeline {
           sh '''
           pwd
           export GOPATH=$(echo $PWD | sed 's@/src/.*@/@g')
-          echo $GOPATH
-          ls -l
+          mkdir reports
           go test -coverprofile=reports/coverage.out 
           go tool cover -html=reports/coverage.out -o reports/coverage.html
           '''
