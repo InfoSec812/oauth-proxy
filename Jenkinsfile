@@ -28,7 +28,7 @@ pipeline {
           sh '''
           pwd
           export GOPATH=$(echo $PWD | sed 's@/src/.*@/@g')
-          go test ./pkg/controller/itcmngm  ./pkg/controller/amqpapp/ -coverprofile=reports/coverage.out 
+          go test -coverprofile=reports/coverage.out 
           go tool cover -html=reports/coverage.out -o reports/coverage.html
           '''
           publishHTML(target: [
