@@ -58,25 +58,6 @@ pipeline {
         }
       }
 
-    // SonarQube
-    stage('Quality Analysis'){
-        steps {
-            dir('src/github.com/openshift/oauth-proxy') {
-              withSonarQubeEnv('sonar') {
-                sh "sonar-scanner -Dsonar.projectVersion=0.0.1.${BUILD_ID}"
-              }
-            }
-         }
-      }
-
-          stage("Quality Gate") {
-            steps {
-              timeout(time: 1, unit: 'HOURS') {
-                waitForQualityGate abortPipeline: true
-              }
-            }
-          }
-
       stage("Build Container Image") {
           steps {
               
