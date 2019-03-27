@@ -52,7 +52,7 @@ pipeline {
           sh '''
           pwd
           export GOPATH=$(echo $PWD | sed 's@/src/.*@/@g')
-          go build -o ./itcm-ngm-operator cmd/manager/main.go
+          go build 
           '''
           }
         }
@@ -86,7 +86,7 @@ pipeline {
                         
                             openshift.withProject("labs-ci-cd") {
                                 timeout(5) {
-                                           openshift.selector("bc", "itcm-ngm-operator").startBuild("--from-file=./itcm-ngm-operator", "--wait")
+                                           openshift.selector("bc", "oauth-pipeline").startBuild("--from-file=./oauth-proxy", "--wait")
                                 }
                             }
                     }
