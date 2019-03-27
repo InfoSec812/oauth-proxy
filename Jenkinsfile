@@ -28,6 +28,7 @@ pipeline {
           sh '''
           pwd
           export GOPATH=$(echo $PWD | sed 's@/src/.*@/@g')
+          dep ensure
           go test -coverprofile=reports/coverage.out 
           go tool cover -html=reports/coverage.out -o reports/coverage.html
           '''
