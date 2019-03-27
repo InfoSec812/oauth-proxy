@@ -64,10 +64,10 @@ pipeline {
               dir('src/github.com/openshift/oauth-proxy') {
                  script {
                     openshift.withCluster() {
-                        
                             openshift.withProject("labs-ci-cd") {
                                 timeout(5) {
-                                           openshift.selector("bc", "oauth-pipeline").startBuild("--from-file=./oauth-proxy", "--wait")
+                                  def bc = openshift.newBuild('--name=oauth-proxy', '--binary=true', '--to=oauth-proxy')
+                                  bc.startBuild("--from-file=./oauth-proxy", "--wait")
                                 }
                             }
                     }
