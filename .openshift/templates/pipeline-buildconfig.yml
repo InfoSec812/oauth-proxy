@@ -1,10 +1,10 @@
 ---
----
+
 kind: Template
 apiVersion: v1
 metadata:
   name: jenkins-pipeline
-objects:  
+objects:
 - apiVersion: v1
   kind: ImageStream
   metadata:
@@ -12,6 +12,28 @@ objects:  
       build: '${NAME}'
     name: '${NAME}'
   spec: {}
+- apiVersion: build.openshift.io/v1
+  kind: BuildConfig
+  metadata:
+    labels:
+      name: oauth-proxy-test
+    name: oauth-proxy-test
+  spec:
+    output:
+      to:
+        kind: ImageStreamTag
+        name: oauth-proxy-test:latest
+    runPolicy: Serial
+    source:
+      binary: {}
+      type: Binary
+    strategy:
+      sourceStrategy:
+        from:
+          kind: ImageStreamTag
+          name: binary-builder:latest
+          namespace: openshift
+      type: Source
 - apiVersion: v1
   kind: BuildConfig
   metadata:
