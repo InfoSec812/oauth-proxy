@@ -66,7 +66,7 @@ pipeline {
                     openshift.withCluster() {
                             openshift.withProject("labs-ci-cd") {
                                 timeout(5) {
-                                  def bc = openshift.newBuild('--name=oauth-proxy-test', '--binary=true', '--to=oauth-proxy', '-i=openshift/binary-builder')
+                                  def bc = openshift.newBuild('--name=oauth-proxy-test', '--binary=true', '--to=oauth-proxy-test', '-i=openshift/binary-builder')
                                   bc.startBuild("--from-file=./oauth-proxy", "--wait")
                                 }
                             }
@@ -79,7 +79,7 @@ pipeline {
           steps {
               script {
                     openshift.withCluster() {
-                        openshift.tag("itcm-ngm-operator:latest", "labs-test/itcm-ngm-operator:0.0.1.${BUILD_ID}")
+                        openshift.tag("oauth-proxy-test:latest", "labs-test/oauth-proxy-test:0.0.1.${BUILD_ID}")
                     }
               }
           }
@@ -90,8 +90,8 @@ pipeline {
                script {
             openshift.withCluster() {
                   openshift.withProject("labs-test") {
-          def deploy = openshift.selector('deploy/itcm-ngm-operator').object()
-          deploy.spec.template.spec.containers[0].image ="docker-registry.default.svc:5000/labs-test/itcm-ngm-operator:0.0.1.${BUILD_ID}"
+          def deploy = openshift.selector('deploy/oauth-proxy-test').object()
+          deploy.spec.template.spec.containers[0].image ="docker-registry.default.svc:5000/labs-test/oauth-proxy-test:0.0.1.${BUILD_ID}"
           openshift.apply(deploy)
                   }
             }
@@ -110,7 +110,7 @@ pipeline {
               }
               script {
                     openshift.withCluster() {
-                        openshift.tag("labs-test/itcm-ngm-operator:0.0.1.${BUILD_ID}", "labs-dev/itcm-ngm-operator:0.0.1.${BUILD_ID}")
+                        openshift.tag("labs-test/oauth-proxy-test:0.0.1.${BUILD_ID}", "labs-dev/oauth-proxy-test:0.0.1.${BUILD_ID}")
                     }
               }
           }
@@ -121,8 +121,8 @@ pipeline {
                script {
             openshift.withCluster() {
                   openshift.withProject("labs-dev") {
-          def deploy = openshift.selector('deploy/itcm-ngm-operator').object()
-          deploy.spec.template.spec.containers[0].image ="docker-registry.default.svc:5000/labs-dev/itcm-ngm-operator:0.0.1.${BUILD_ID}"
+          def deploy = openshift.selector('deploy/oauth-proxy-test').object()
+          deploy.spec.template.spec.containers[0].image ="docker-registry.default.svc:5000/labs-dev/oauth-proxy-test:0.0.1.${BUILD_ID}"
           openshift.apply(deploy)
                   }
             }
