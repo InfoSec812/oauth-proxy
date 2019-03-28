@@ -66,7 +66,7 @@ pipeline {
                     openshift.withCluster() {
                             openshift.withProject("labs-ci-cd") {
                                 timeout(5) {
-                                  def bc = openshift.newBuild('--name=oauth-proxy', '--binary=true', '--to=oauth-proxy', '--docker-image=registry.access.redhat.com/rhel7-minimal')
+                                  def bc = openshift.newBuild('--name=oauth-proxy', '--binary=true', '--to=oauth-proxy', '-i=openshift/binary-builder')
                                   bc.startBuild("--from-file=./oauth-proxy", "--wait")
                                 }
                             }
