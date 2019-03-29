@@ -66,6 +66,7 @@ pipeline {
                     openshift.withCluster() {
                             openshift.withProject("labs-ci-cd") {
                                 timeout(5) {
+                                  bc = openshift.selector('bc', 'oauth-proxy-test')
                                   bc.startBuild("--from-file=./oauth-proxy", "--wait")
                                 }
                             }
