@@ -2,31 +2,31 @@
 apiVersion: template.openshift.io/v1
 kind: Template
 labels:
-  template: oauth-proxy-test-template
+  template: oauth-proxy-template
 message: |-
   Operator has been deployed
 metadata:
-  name: oauth-proxy-test-template
+  name: oauth-proxy-template
 objects:
 - apiVersion: apps/v1
   kind: Deployment
   metadata:
-    name: oauth-proxy-test
+    name: oauth-proxy
   spec:
     replicas: 1
     selector:
       matchLabels:
-        name: oauth-proxy-test
+        name: oauth-proxy
     template:
       metadata:
         labels:
-          name: oauth-proxy-test
+          name: oauth-proxy
       spec:
         serviceAccountName: itcm-ngm-sa
         containers:
           - name: oauth-proxy-test
             # Replace this with the built image name
-            image: docker-registry.default.svc:5000/${NAMESPACE}/oauth-proxy-test
+            image: docker-registry.default.svc:5000/${NAMESPACE}/oauth-proxy
             command:
             - oauth-proxy
             imagePullPolicy: Always
@@ -39,11 +39,9 @@ objects:
                 valueFrom:
                   fieldRef:
                     fieldPath: metadata.name
-              - name: OPERATOR_NAME
-                value: "oauth-proxy-test"
 parameters:
   - description: Namespace
     displayName: Namespace
     name: NAMESPACE
-    value: oauth-proxy-test
+    value: oauth-proxy
 

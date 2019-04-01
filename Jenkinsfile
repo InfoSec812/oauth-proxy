@@ -66,7 +66,7 @@ pipeline {
                     openshift.withCluster() {
                             openshift.withProject("labs-ci-cd") {
                                 timeout(5) {
-                                  bc = openshift.selector('bc', 'oauth-proxy-test')
+                                  bc = openshift.selector('bc', 'oauth-proxy')
                                   bc.startBuild("--from-file=./oauth-proxy", "--wait")
                                 }
                             }
@@ -79,7 +79,7 @@ pipeline {
           steps {
               script {
                     openshift.withCluster() {
-                        openshift.tag("oauth-proxy-test:latest", "labs-test/oauth-proxy-test:0.0.1.${BUILD_ID}")
+                        openshift.tag("oauth-proxy:latest", "labs-test/oauth-proxy:0.0.1.${BUILD_ID}")
                     }
               }
           }
@@ -90,8 +90,8 @@ pipeline {
                script {
             openshift.withCluster() {
                   openshift.withProject("labs-test") {
-          def deploy = openshift.selector('deploy/oauth-proxy-test').object()
-          deploy.spec.template.spec.containers[0].image ="docker-registry.default.svc:5000/labs-test/oauth-proxy-test:0.0.1.${BUILD_ID}"
+          def deploy = openshift.selector('deploy/oauth-proxy').object()
+          deploy.spec.template.spec.containers[0].image ="docker-registry.default.svc:5000/labs-test/oauth-proxy:0.0.1.${BUILD_ID}"
           openshift.apply(deploy)
                   }
             }
@@ -110,7 +110,7 @@ pipeline {
               }
               script {
                     openshift.withCluster() {
-                        openshift.tag("labs-test/oauth-proxy-test:0.0.1.${BUILD_ID}", "labs-dev/oauth-proxy-test:0.0.1.${BUILD_ID}")
+                        openshift.tag("labs-test/oauth-proxy:0.0.1.${BUILD_ID}", "labs-dev/oauth-proxy:0.0.1.${BUILD_ID}")
                     }
               }
           }
@@ -121,8 +121,8 @@ pipeline {
                script {
             openshift.withCluster() {
                   openshift.withProject("labs-dev") {
-          def deploy = openshift.selector('deploy/oauth-proxy-test').object()
-          deploy.spec.template.spec.containers[0].image ="docker-registry.default.svc:5000/labs-dev/oauth-proxy-test:0.0.1.${BUILD_ID}"
+          def deploy = openshift.selector('deploy/oauth-proxy').object()
+          deploy.spec.template.spec.containers[0].image ="docker-registry.default.svc:5000/labs-dev/oauth-proxy:0.0.1.${BUILD_ID}"
           openshift.apply(deploy)
                   }
             }
